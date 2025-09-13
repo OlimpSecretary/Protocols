@@ -37,18 +37,18 @@ from time import sleep
 from dash.dependencies import ALL
 from datetime import datetime, timedelta, time
 import dash_bootstrap_components as dbc
-import re
+# import re
 import dash_daq
 from app.util.mailer import MailSender
 import secrets
 import string
 import json
 from glob import glob
-from dash import CeleryManager
-import celery
+# from dash import CeleryManager
+# import celery
 from dash import DiskcacheManager
 import diskcache
-from chardet import detect
+# from chardet import detect
 from app.util.excel_writer import ExcelWriter
 TOGGLE_LABEL_DICT= {False: "Учасники чекають на запрошення", True: "Запрошення розіслані!"}
 LATTER_PATTERN ="""Шановний LEADER_COACH_NAME!
