@@ -189,6 +189,16 @@ class InterestingClass:
         return bins, str_lst
 
     @staticmethod
+    def modify_config_file(key, value):
+        with open(parameter["config-path"], "r") as f:
+            users_json = json.load(f)
+            users_json[key] = value
+            with open(parameter["config-path"], "w") as f_:
+                json.dump(users_json, f_, indent=4)
+
+
+
+    @staticmethod
     def process_and_write_credits(login, password):
         with open(parameter["user-json-file"], "r") as f:
             users_json = json.load(f)
@@ -404,14 +414,15 @@ class InterestingClass:
                 ),
 
                 dbc.Col(
-                    html.Div([
+                    html.Div([html.Div(hidden=True, id="CategoriesNamesHidden"),
                         html.Div("Назви категорій", style={'display': 'inline-block',
                                                                     'margin-left': '5%', 'margin-right': '2%'}),
                         dcc.Input(
                             id="CategoriesNames",
-                            value="A, B, C, D",
+                            value=", ".join(parameter["categories_names_lst"]),
                             style={'width': '200px', 'height': 30}
-                        , persistence=True)
+                        # , persistence=True
+                        )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
                     width=7
                 )
@@ -427,8 +438,8 @@ class InterestingClass:
                                                         id='AgeCuts',
                                                         value=2,
                                                         type='number',
-                                                        min=1,
-                                                        max=3,
+                                                        min=2,
+                                                        max=4,
                                                         style={'width': '10%', 'height': 30}  # Adjust height as needed
                                                     , persistence=True),
                                                     html.Div("Мінімальний вік",
@@ -450,13 +461,14 @@ class InterestingClass:
                                             style = {"display": "flex", "alignItems": "center"}),
 
 
-                                                    dbc.Col([
+                                                    dbc.Col([html.Div(hidden=True, id="CategoriesAgeHidden"),
                                                     html.Div("Вікові категорії", style={'display': 'inline-block',
                                                                                        'margin-left': '5%',
                                                                                        'margin-right': '2%'}),
-                                                    dcc.Input(id="CategoriesAge", value="6-7, 8-9, 10-11, 12-13, 14-15, 16-17, 18+",
+                                                    dcc.Input(id="CategoriesAge", value=", ".join(parameter["categories_age_lst"]),
                                                               style={'width': '40%', 'height': 30}
-                                                              , persistence=True)], width=7
+                                                              # , persistence=True
+                                                              )], width=7
                                                    , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ############## ВАГОВІ КАТЕГОРІЇ ########################
         left_admin_container_children.append(dbc.Row([dbc.Col([html.Div("Кількість",
@@ -488,33 +500,36 @@ class InterestingClass:
                                                    width=5,
                                                    style={"display": "flex", "alignItems": "center"}),
 
-                                           dbc.Col([
+                                           dbc.Col([html.Div(hidden=True, id="CategoriesWeightHidden"),
                                                html.Div("Вагові категорії", style={'display': 'inline-block',
                                                                                    'margin-left': '5%',
                                                                                    'margin-right': '2%'}),
                                                dcc.Input(id="CategoriesWeight",
-                                                         value="0-20, 20-40,40-60, 60+",
+                                                         value=", ".join(parameter["categories_weight_lst"]),
                                                          style={'width': '40%', 'height': 30}
-                                                         , persistence=True)], width=7
+                                                         # , persistence=True
+                                                         )], width=7
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
 
-        left_admin_container_children.append(dbc.Row([dbc.Col([html.Div("Гендерні категорії",
+        left_admin_container_children.append(dbc.Row([dbc.Col([html.Div(hidden=True, id="SexCutsHidden"),
+                                                               html.Div("Гендерні категорії",
                                                              style={'display': 'inline-block',
                                                                     'margin-left': '5%', 'margin-right': '2%'}),
                                                     dcc.Input(
                                                         id='SexCuts',
-                                                        value="Дівчата, Хлопці, Мікс",
+                                                        value=", ".join(parameter["sex_cuts_lst"]),
                                                         style={'width': '40%', 'height': 30}  # Adjust height as needed
-                                                        , persistence=True),
+                                                        # , persistence=True
+                                                    ),
                                                     ],
                                                    width=5,
                                                    style={"display": "flex", "alignItems": "center"}),
-                                           dbc.Col([
+                                           dbc.Col([html.Div(hidden=True, id="SectionsHidden"),
                                                html.Div("Розділи", style={'display': 'inline-block',
                                                                                    'margin-left': '5%',
                                                                                    'margin-right': '2%'}),
                                                dcc.Input(id="Sections",
-                                                         value="Ката, Куміте, Командне ката",
+                                                         value=", ".join(parameter["sections_all_lst"]),
                                                          style={'width': '50%', 'height': 30}
                                                          , persistence=True)], width=7
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
@@ -889,7 +904,8 @@ dbc.Col([]
         @app.callback(Output("MemberSex", "options"),
                       [Input("SexCuts", "value")])
         def submit_member_sex(sex_cuts):
-            return [g.rstrip().lstrip()  for g in sex_cuts.split(", ")[:2]]
+            sex_cuts_lst = [g.rstrip().lstrip()  for g in sex_cuts.split(",")]
+            return [g.rstrip().lstrip()  for g in sex_cuts.split(",")[:2]]
 
         @app.callback([Output("SectionLists", "children"),
                        Output("WeightlessSections", "children")],
@@ -909,22 +925,29 @@ dbc.Col([]
 
         ################################################################
         @app.callback(Output("CategoriesNames", "value"),
-                      [Input("CategoriesNumber", "value")])
+                      [Input("CategoriesNumber", "value")], prevent_initial_callback=True)
         def submit_categories(categories_number):
-            return ", ".join([chr(i + ord("A")) for i in range(categories_number)])
+            categories_names_lst = [chr(i + ord("A")) for i in range(categories_number)]
+            return ", ".join(categories_names_lst)
 
         @app.callback(Output("CategoriesAge", "value"),
                       [Input("MinAge", "value"), Input("AgeCuts", "value")])
         def submit_ages(min_age, age_step):
-            lst_ = [f"{a1}-{min(a2,18)-1}" for a1, a2 in zip(range(min_age, 18, age_step), range(min_age+age_step, 18+age_step, age_step))]
-            return ", ".join(lst_) + ", 18+"
+            max_age = 18
+            categories_age_lst = [f"{a1}-{min(a2, max_age)-1}" for a1, a2 in zip(range(min_age, max_age, age_step), range(min_age+age_step, 18+age_step, age_step)) if (a1 != min(a2,max_age)-1)]
+            if (max_age-min_age)% age_step != 0:
+                max_age = 17
+            categories_age_lst.append(f"{max_age}+")
+            return ", ".join(categories_age_lst)
 
         @app.callback(Output("CategoriesWeight", "value"),
                       [Input("MaxWeight", "value"), Input("WeightNumber", "value")])
         def submit_weights(max_weight, weights_number):
             step = max_weight//weights_number
-            lst_ = [f"{a1}-{min(a2, max_weight)-1}" for a1, a2 in zip(range(0, max_weight, step), range(step, max_weight+step, step))]
-            return ", ".join(lst_) + f", {max_weight}+"
+            start = max_weight % weights_number
+            categories_weight_lst = [f"{a1}-{min(a2, max_weight)-1}" for a1, a2 in zip(range(start, max_weight, step), range(step+start, max_weight+step, step)) if (a1 != min(a2, max_weight)-1)]
+            categories_weight_lst.append(f"{max_weight}+")
+            return ", ".join(categories_weight_lst)
 
 
         @app.callback([Output("TeamTable", "data"),
@@ -1179,7 +1202,44 @@ dbc.Col([]
                 excel_writer.write_style(df, key)
             return dash.no_update
 
+        @app.callback(Output("CategoriesNamesHidden", "children"),
+                      Input("CategoriesNames", "value"))
+        def dump_categories(categories):
+            self.modify_config_file("categories_names_lst", [c.lstrip().rstrip() for c in categories.split(",")])
+            return dash.no_update
+
+        @app.callback(Output("CategoriesWeightHidden", "children"),
+                      Input("CategoriesWeight", "value"))
+        def dump_category_weight(categories):
+            self.modify_config_file("categories_weight_lst", [c.lstrip().rstrip() for c in categories.split(",")])
+            return dash.no_update
+
+        @app.callback(Output("CategoriesAgeHidden", "children"),
+                      Input("CategoriesAge", "value"))
+        def dump_category_age(categories):
+            self.modify_config_file("categories_age_lst", [c.lstrip().rstrip() for c in categories.split(",")])
+            return dash.no_update
+
+        @app.callback([Output("SectionsHidden", "children")]
+            , [Input("Sections", "value"), Input("SexCuts", "value")])
+        def dump_sections(sections, sex_cuts):
+            self.modify_config_file("sections_all_lst", [s.rstrip().lstrip() for s in sections.split(",")])
+            # lists_ = []
+            # for id_idx, sec in enumerate(sections.split(",")):
+            #     lists_.append([f"{sec.rstrip().lstrip()} {g.rstrip().lstrip()}" for g in sex_cuts.split(",")])
+            # if lists_:
+            #     self.modify_config_file("sections_all_lst", lists_)
+            return dash.no_update
+
+        @app.callback([Output("SexCutsHidden", "children")]
+            , [Input("SexCuts", "value")])
+        def dump_sections(sex_cuts):
+            self.modify_config_file("sex_cuts_lst", [s.lstrip().rstrip() for s in sex_cuts.split(",")])
+            return dash.no_update
+
+
         return app
+
 
 if __name__ == "__main__":
     df = pd.DataFrame({
