@@ -1,4 +1,5 @@
 import os.path
+from os.path import basename
 import dash_daq as daq
 import dash
 from click import style
@@ -199,10 +200,11 @@ class InterestingClass:
 
 
     @staticmethod
-    def process_and_write_credits(login, password):
+    def process_and_write_credits(login, name, password):
         with open(parameter["user-json-file"], "r") as f:
             users_json = json.load(f)
             users_json["users"][login] = password
+            users_json["users_names"][login] = name
             users_json["users_permissions"][login] = "user"
             users_json["users_classes"][login] = "user"
             with open(parameter["user-json-file"], "w") as f_:
@@ -821,7 +823,7 @@ dbc.Col([]
                     message = self.compose_mail(names, emails, competition_date, deadline, title, pattern, password, idx=idx_)
                     files = []
                     sender.send_mail(f"Запрошення на змагання", message, files)
-                    self.process_and_write_credits(emails_[idx_], password)
+                    self.process_and_write_credits(emails_[idx_], names_[idx_], password)
                     with open(os.path.join(this_competition_inv_dir, emails_[idx_]), "w") as f:
                         f.write(message)
                 return True, TOGGLE_LABEL_DICT[True]
@@ -850,6 +852,17 @@ dbc.Col([]
                 list_[0]
                 , style={"margin-left": "10%"}, id="CategoryMemberCheck")
 
+        @app.callback(Output("CoachName", "value")
+                      ,Input("url", "pathname"))
+        def set_coach_name(url):
+            with open(parameter["user-json-file"], "r") as f:
+                users_json = json.load(f)
+                print(current_user.id)
+                print(list(users_json["users_names"].keys()))
+                print(current_user.id in users_json["users_names"].keys())
+                if current_user.id in users_json["users_names"].keys():
+                    return users_json["users_names"][current_user.id]
+            return dash.no_update
 
         # TeamLeadsName
         @app.callback(Output("coachName-options", "children"),
@@ -903,7 +916,7 @@ dbc.Col([]
 
         @app.callback(Output("MemberSex", "options"),
                       [Input("SexCuts", "value")])
-        def submit_member_sex(sex_cuts):
+        def submit_member_sex_options(sex_cuts):
             sex_cuts_lst = [g.rstrip().lstrip()  for g in sex_cuts.split(",")]
             return [g.rstrip().lstrip()  for g in sex_cuts.split(",")[:2]]
 
@@ -1146,7 +1159,7 @@ dbc.Col([]
 
             for file_ in submission_files:
                 df_ = pd.read_csv(file_)
-                df_["team-lead"] = file_
+                df_["team-lead"] = basename(file_)
 
                 age_bins, age_labels = self.get_bins(ages)
                 df_["age_cuts"] = pd.cut(df_["Вік"], age_bins, labels=age_labels)

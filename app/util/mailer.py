@@ -21,7 +21,7 @@ class MailSender:
         self.recipients_lst = recipients_lst
 
     def send_mail(self, subject, text, files=None,
-                  server="127.0.0.1"):
+                  file_name="Заявка.csv"):
 
         msg = MIMEMultipart()
         msg['From'] = self.sender_credits["user"]
@@ -35,7 +35,7 @@ class MailSender:
             with open(f, "rb") as fil:
                 part = MIMEApplication(
                     fil.read(),
-                    Name=basename(f)
+                    Name=file_name#basename(f)
                 )
             # After the file is closed
             part['Content-Disposition'] = 'attachment; filename="%s"' % basename(f)
