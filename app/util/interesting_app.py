@@ -329,7 +329,7 @@ class InterestingClass:
                 list_
                 , persistence=True
                 , style={"margin-left": "10%"}, id="Weightless-check")
-                , width=2, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
+                , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
         return children_
 
     def _get_checklists(self, lists_):
@@ -339,7 +339,7 @@ class InterestingClass:
                 lst_,
                 lst_
                 , style={"margin-left": "10%"}, id={"type": "Section-check", "index": idx})
-                , width=2, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
+                , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
         return children_
 
 
@@ -350,11 +350,11 @@ class InterestingClass:
         left_admin_container_children = []
         right_admin_container_children = []
         left_admin_container_children.append(dbc.Row([dbc.Col([html.Div("Назва змагань", style={'display': 'inline-block',
-                                                                    'margin-left': '15%', 'margin-right': '2%'})], width=2), dbc.Col([ dcc.Textarea(
+                                                                    'margin-left': '15%', 'margin-right': '2%'})], width='auto'), dbc.Col([ dcc.Textarea(
             id="CompetitionTitle",
             value="Чемпіонат...",
-            style={'width': '70%', 'height': 60} # Adjust height as needed
-        )], width=10),], className="mb-3"))
+            style={'width': '70%', 'height': 60, 'minWidth': '200px'} # Adjust height as needed
+        )], width='auto'),], className="mb-3"))
         ############## ДАТА ЗМАГАНЬ ########################
         left_admin_container_children.append(
             dbc.Row([
@@ -373,7 +373,7 @@ class InterestingClass:
                     persistence_type = 'local'
                     )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
-                    width=6
+                    width='auto'
                 ),
 
                 dbc.Col(
@@ -390,7 +390,7 @@ class InterestingClass:
                             persistence_type = 'local'
                         )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
-                    width=6
+                    width='auto'
                 )
 
             ], className="mb-3")
@@ -409,10 +409,10 @@ class InterestingClass:
                             type='number',
                             min=1,
                             max=10,
-                            style={'width': '42%', 'height': 30}
+                            style={'width': '42%', 'height': 30, 'minWidth': '40px'}
                         , persistence=True)
                     ], style={'display': 'flex', 'alignItems': 'center'}),
-                    width=5
+                    width='auto'
                 ),
 
                 dbc.Col(
@@ -422,11 +422,11 @@ class InterestingClass:
                         dcc.Input(
                             id="CategoriesNames",
                             value=", ".join(parameter["categories_names_lst"]),
-                            style={'width': '200px', 'height': 30}
+                            style={'width': '200px', 'height': 30, 'minWidth': '200px'}
                         # , persistence=True
                         )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
-                    width=7
+                    width='auto'
                 )
 
             ], className="mb-3")
@@ -442,7 +442,7 @@ class InterestingClass:
                                                         type='number',
                                                         min=2,
                                                         max=4,
-                                                        style={'width': '10%', 'height': 30}  # Adjust height as needed
+                                                        style={'width': '10%', 'height': 30, 'minWidth': '40px'}  # Adjust height as needed
                                                     , persistence=True),
                                                     html.Div("Мінімальний вік",
                                                              style={'display': 'inline-block',
@@ -454,7 +454,7 @@ class InterestingClass:
                                                         type='number',
                                                         min=4,
                                                         max=14,
-                                                        style={'width': '10%', 'height': 30}
+                                                        style={'width': '10%', 'height': 30, 'minWidth': '40px'}
                                                         # Adjust height as needed
                                                     , persistence=True),
 
@@ -470,7 +470,7 @@ class InterestingClass:
                                                     dcc.Input(id="CategoriesAge", value=", ".join(parameter["categories_age_lst"]),
                                                               style={'width': '40%', 'height': 30}
                                                               # , persistence=True
-                                                              )], width=7
+                                                              )], width='auto'
                                                    , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ############## ВАГОВІ КАТЕГОРІЇ ########################
         left_admin_container_children.append(dbc.Row([dbc.Col([html.Div("Кількість",
@@ -482,7 +482,7 @@ class InterestingClass:
                                                         type='number',
                                                         min=1,
                                                         max=10,
-                                                        style={'width': '16%', 'height': 30}  # Adjust height as needed
+                                                        style={'width': '16%', 'height': 30, 'minWidth': '40px'}  # Adjust height as needed
                                                         , persistence=True),
                                                     html.Div("Супер-тяж-вага",
                                                              style={'display': 'inline-block',
@@ -494,12 +494,12 @@ class InterestingClass:
                                                         type='number',
                                                         min=30,
                                                         max=120,
-                                                        style={'width': '11%', 'height': 30}
+                                                        style={'width': '11%', 'height': 30, 'minWidth': '40px'}
                                                         # Adjust height as needed
                                                         , persistence=True),
 
                                                     ],
-                                                   width=5,
+                                                   width='auto',
                                                    style={"display": "flex", "alignItems": "center"}),
 
                                            dbc.Col([html.Div(hidden=True, id="CategoriesWeightHidden"),
@@ -508,9 +508,9 @@ class InterestingClass:
                                                                                    'margin-right': '2%'}),
                                                dcc.Input(id="CategoriesWeight",
                                                          value=", ".join(parameter["categories_weight_lst"]),
-                                                         style={'width': '40%', 'height': 30}
+                                                         style={'width': '40%', 'height': 30, 'minWidth': '200px'}
                                                          # , persistence=True
-                                                         )], width=7
+                                                         )], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
 
         left_admin_container_children.append(dbc.Row([dbc.Col([html.Div(hidden=True, id="SexCutsHidden"),
@@ -520,11 +520,11 @@ class InterestingClass:
                                                     dcc.Input(
                                                         id='SexCuts',
                                                         value=", ".join(parameter["sex_cuts_lst"]),
-                                                        style={'width': '40%', 'height': 30}  # Adjust height as needed
+                                                        style={'width': '40%', 'height': 30, 'minWidth': '180px'}  # Adjust height as needed
                                                         # , persistence=True
                                                     ),
                                                     ],
-                                                   width=5,
+                                                   width='auto',
                                                    style={"display": "flex", "alignItems": "center"}),
                                            dbc.Col([html.Div(hidden=True, id="SectionsHidden"),
                                                html.Div("Розділи", style={'display': 'inline-block',
@@ -532,8 +532,8 @@ class InterestingClass:
                                                                                    'margin-right': '2%'}),
                                                dcc.Input(id="Sections",
                                                          value=", ".join(parameter["sections_all_lst"]),
-                                                         style={'width': '50%', 'height': 30}
-                                                         , persistence=True)], width=7
+                                                         style={'width': '50%', 'height': 30, 'minWidth': '200px'}
+                                                         , persistence=True)], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
 ##################### weightless ####################
         left_admin_container_children.append(
@@ -546,42 +546,50 @@ dbc.Row([dbc.Col(dcc.Checklist(
     ['Ката Дівчата', 'Ката Хлопці', 'Ката Мікс'],
     ['Ката Дівчата', 'Ката Хлопці', 'Ката Мікс']
 ,style={"margin-left": "10%"}, id="Section-1-check")
-    , width=4, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"),
+    , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"),
 dbc.Col([]
-        , width=4, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3")], id="SectionLists"))
+        , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3")], id="SectionLists"))
 
         left_admin_container_children.append(
             dbc.Row([dbc.Col([html.Div("Головний Суддя", style={'display': 'inline-block',
                                                                     'margin-left': '10%', 'margin-right': '2%'}),
-                              dcc.Input(id="ChiefJudge", value="Романець Т.Б.", type="text", list="chiefjudge-options"),
+                              dcc.Input(id="ChiefJudge", value="Романець Т.Б.",
+                                        type="text", list="chiefjudge-options",
+                                        style={'width': '50%', 'height': 30, 'minWidth': '200px'}),
             html.Datalist(id="chiefjudge-options", children=[
                 html.Option(value=fruit) for fruit in OPT_CHIEFJUDGE_LST
             ])]
-                                 , width=6, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"),
+                                 , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"),
                      dbc.Col([html.Div("Головний Секретар", style={'display': 'inline-block',
                                                                     'margin-left': '10%', 'margin-right': '2%'}),
-                              dcc.Input(id="ChiefSecretary", value="Романець Т.Б.",type="text", list="chiefsecretary-options"),
+                              dcc.Input(id="ChiefSecretary", value="Романець Т.Б.",type="text",
+                                        list="chiefsecretary-options",
+                                        style={'width': '50%', 'height': 30, 'minWidth': '200px'}),
             html.Datalist(id="chiefsecretary-options", children=[
                 html.Option(value=fruit) for fruit in OPT_CHIEFSECRETARY_LST
             ])]
-                                 , width=6, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3")]))
+                                 , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3")]))
 
         left_admin_container_children.append(html.Hr(style={'margin-top': '20px', 'margin-bottom': '20px', 'borderWidth': '1px', 'borderColor': 'gray',
                        'borderStyle': 'solid'}))
-        admin_container_children = dbc.Row([dbc.Col(left_admin_container_children, width=9, style={'alignItems': 'center'},
+        admin_container_children = dbc.Row([dbc.Col(left_admin_container_children, width='auto', style={'alignItems': 'center'},
                                                     className="mb-3"), dbc.Col([dbc.Row(html.Div("ПІБ тренерів команд")),
-                                                                                dbc.Row([dcc.Input(type="text", list="coachName-options",
-                                                                                                   persistence=True, id="TeamLeadsNames"),
+                                                                                dbc.Row([dcc.Input(type="text",
+                                                                                                   list="coachName-options",
+                                                                                                   persistence=True,
+                                                                                                   id="TeamLeadsNames",
+                                                                                                   style={'width': '50%', 'height': 30, 'minWidth': '200px'}),
                                                                                          html.Datalist(id="coachName-options", children=[
                     html.Option(value=name) for name in OPT_COACHES_LST+OPT_GIRLS_NAME+OPT_BOYS_NAME
                 ])]),
                                                                                      dbc.Row(html.Div("Введіть e-mail тренерів команд в тому ж порядку")),
-                                                                                dbc.Row(dcc.Input(type="text", persistence=True, id="TeamLeadsEmails")),
+                                                                                dbc.Row(dcc.Input(type="text", persistence=True, id="TeamLeadsEmails",
+                                                                                                  style={'width': '50%', 'height': 30, 'minWidth': '200px'})),
                                                                                 dbc.Row(html.Div("Шаблон листа")),
                                                                                 dbc.Row(dcc.Textarea(
         id="LatterPattern",
         value=LATTER_PATTERN,
-        style={'width': '100%', 'height': 350, 'display': 'flex'},
+        style={'width': '100%', 'height': 350, 'display': 'flex','minWidth': '200px'},
         persistence=True
     ),),  dbc.Row(dcc.Textarea(
         id="LatterExample",
@@ -602,7 +610,7 @@ dbc.Col([]
         value=False,
         style={"margin-top":"20px"}
     ))
-                                                                                ], width=2, style={'alignItems': 'center'}, className="mb-3")])
+                                                                                ], width='auto', style={'alignItems': 'center'}, className="mb-3")])
 
         container_children.append(html.Div(children=admin_container_children, id="admin_only_tools", hidden=True))
 ################################################################# КОМАНДИ #########################################################
@@ -626,24 +634,24 @@ dbc.Col([]
                                                                     'margin-left': '10%', 'margin-right': '2%'})
                                  , dcc.Input(id="Teams",
                                                          value="Олімп",
-                                                         style={'width': '50%', 'height': 30},
+                                                         style={'width': '50%', 'height': 30, 'minWidth': '200px'},
                                                                    type="text"
                                                                    , list="teams-options"
                                                          , persistence=True), html.Datalist(id="teams-options", children=[
                 html.Option(value=fruit) for fruit in OPT_TEAMS_LST
-            ])], width=6
+            ])], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"),
 
                      dbc.Col([html.Div("Тренер команди", style={'display': 'inline-block',
                                                                'margin-left': '10%', 'margin-right': '2%'})
                                  , dcc.Input(id="CoachName",
                                              value="Т.Б. Романець",
-                                             style={'width': '50%', 'height': 30},
+                                             style={'width': '50%', 'height': 30, 'minWidth': '200px'},
                                              type="text"
                                              , list="coach-options"
                                              , persistence=True), html.Datalist(id="coach-options", children=[
                              html.Option(value=fruit) for fruit in OPT_COACHES_LST
-                         ])], width=6
+                         ])], width='auto'
                              , style={'display': 'flex', 'alignItems': 'center'}, className="mb-3")
                      ]))
 
@@ -652,14 +660,14 @@ dbc.Col([]
                                                                'margin-left': '10%', 'margin-right': '2%'})
                                  , dcc.Input(id="MemberName",
                                              value="",
-                                             style={'width': '50%', 'height': 30},
+                                             style={'width': '50%', 'height': 30, 'minWidth': '200px'},
                                              type="text"
                                              , list="memberName-options"
                                              , persistence=True), html.Datalist(id="memberName-options", children=[
                     html.Option(value=name) for name in OPT_GIRLS_NAME+OPT_BOYS_NAME
                 ]), dcc.RadioItems(['Дівчата', 'Хлопці'], 'Хлопці', inline=True, id="MemberSex",
                                    style={'display': 'inline-block','margin-left': '5px', 'margin-right': '5px'},
-                                   labelStyle={'margin-left': '1px', 'margin-right': '5px'})], width=6
+                                   labelStyle={'margin-left': '1px', 'margin-right': '5px'})], width='auto'
                              , style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"),
 
                      dbc.Col([
@@ -669,7 +677,7 @@ dbc.Col([]
                                              value=11,
                                              min=4,
                                              max=18,
-                                             style={'width': '11%', 'height': 30},
+                                             style={'width': '11%', 'height': 30, 'minWidth': '200px'},
                                              type="number"
                                              , persistence=True),
                          html.Div("Вага", style={'display': 'inline-block',
@@ -678,9 +686,9 @@ dbc.Col([]
                                              value=40,
                                              min=8,
                                              max=90,
-                                             style={'width': '11%', 'height': 30},
+                                             style={'width': '11%', 'height': 30, 'minWidth': '100px'},
                                              type="number"
-                                             , persistence=True),], width=6
+                                             , persistence=True),], width='auto'
                              , style={'display': 'flex', 'alignItems': 'center'}, className="mb-3")
                      ]))
 
@@ -692,7 +700,7 @@ dbc.Col([]
     style={"margin-left": "10%"},
     id="SectionMemberCheck"   # fixed: Latin C
 )]
-            , width=6, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3", id="MemberSectionLists"),
+            , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3", id="MemberSectionLists"),
             dbc.Col([dcc.RadioItems(
                 [],
                 []
@@ -703,7 +711,7 @@ dbc.Col([]
                                                        , html.Button("Інструкція", id="HelpButton")
                                                        , html.Button("Подати заявку", id="SubmitTeamButton")]
 
-            , width=12, style={'display': 'flex', 'alignItems': 'center'}, className="mb-3", id="TeamButtons")]))
+            , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3", id="TeamButtons")]))
         right_column_container = []
         right_column_container.append(dash_table.DataTable(
                     row_selectable="single",
@@ -717,8 +725,10 @@ dbc.Col([]
                     },
                     style_cell={"textAlign": "right"}
                 ))
-        container_children.append(dbc.Row([dbc.Col(left_column_container, style={'alignItems': 'center',  "paddingRight":0}, width=6)
-                                              , dbc.Col(right_column_container, style={'alignItems': 'center', "paddingRight":0}, width=6)], className="g-0"))
+        container_children.append(dbc.Row([dbc.Col(left_column_container, style={'alignItems': 'center',
+                                                                                 "paddingRight":0}, width='auto')
+                                              , dbc.Col(right_column_container, style={'alignItems': 'center',
+                                                                                       "paddingRight":0}, width='auto')], className="g-0"))
         container_children.append(dcc.Input("", id="SetSexDirectly", style={"display": "none"}))
         container_children.append(dcc.Store(id="SetSectionDirectly", data=[]))
         container_children.append(dcc.Store(id="StoreTeamTable", data=[], storage_type="local"))
