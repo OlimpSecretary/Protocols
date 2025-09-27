@@ -816,7 +816,7 @@ dbc.Col([]
                           , State("TeamLeadsNames", "value")
                       , State("SubmissionDeadline", "date")
                           , State("CompetitionDate", "date"),
-                       State("LatterPattern", "value")])
+                       State("LatterPattern", "value")], prevent_initial_callback=True)
         def send_invitations(n_clicks, title, emails, names, deadline, competition_date, pattern):
             this_competition_inv_dir = os.path.join(parameter["invitations_dir"], f"D{deadline}CD{competition_date}")
             names_ = [name_.lstrip().rstrip() for name_ in names.split(",")]
@@ -874,8 +874,12 @@ dbc.Col([]
 
         # TeamLeadsName
         @app.callback(Output("coachName-options", "children"),
-                      Input("TeamLeadsNames", "value"))
+                      Input("TeamLeadsNames", "value"), prevent_initial_callback=True)
         def submit_coach_name_opt(name):
+            if name is None:
+                return dash.no_update
+            if name == "":
+                return dash.no_update
             name_lst = name.split()
             if len(name_lst) > 1:
                 return [html.Option(value=f"{' '.join(name_lst[:-1])} {name}") for name in
@@ -884,8 +888,10 @@ dbc.Col([]
                 return [html.Option(value=name) for name in OPT_GIRLS_NAME + OPT_BOYS_NAME]
         # "MemberName"
         @app.callback([Output("MemberSex", "value"),Output("memberName-options", "children")],
-                      [Input("MemberName", "value"), State("SexCuts", "value")#State("MemberSex", "options")
-                       ,Input("SetSexDirectly", "value"), Input("url", "pathname")])
+                      [Input("MemberName", "value"),
+                       State("SexCuts", "value")#State("MemberSex", "options")
+                       ,Input("SetSexDirectly", "value"),
+                       Input("url", "pathname")])
         def submit_member_sex(name, sex_cuts, directly, url):
             opt = [g.rstrip().lstrip() for g in sex_cuts.split(", ")[:2]]
             if callback_context.triggered_id == "SetSexDirectly":
@@ -952,7 +958,8 @@ dbc.Col([]
             return ", ".join(categories_names_lst)
 
         @app.callback(Output("CategoriesAge", "value"),
-                      [Input("MinAge", "value"), Input("AgeCuts", "value")])
+                      [Input("MinAge", "value"),
+                       Input("AgeCuts", "value")], prevent_initial_callback=True)
         def submit_ages(min_age, age_step):
             max_age = 18
             categories_age_lst = [f"{a1}-{min(a2, max_age)-1}" for a1, a2 in zip(range(min_age, max_age, age_step), range(min_age+age_step, 18+age_step, age_step)) if (a1 != min(a2,max_age)-1)]
@@ -962,7 +969,8 @@ dbc.Col([]
             return ", ".join(categories_age_lst)
 
         @app.callback(Output("CategoriesWeight", "value"),
-                      [Input("MaxWeight", "value"), Input("WeightNumber", "value")])
+                      [Input("MaxWeight", "value"),
+                       Input("WeightNumber", "value")], prevent_initial_callback=True)
         def submit_weights(max_weight, weights_number):
             step = max_weight//weights_number
             start = max_weight % weights_number
@@ -1060,7 +1068,7 @@ dbc.Col([]
             else:
                 redirect("/")
         @app.callback(Output("CountDownDisplay", "value"), [Input("Interval", "n_intervals"),
-                                 State("SubmissionDeadline", "date"),] )
+                                 Input("SubmissionDeadline", "date"),] )
         def deadline_countdown(interval, deadline_date):
             if not hasattr(current_user, "name"):
                 redirect("/")
