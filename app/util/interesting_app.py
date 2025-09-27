@@ -527,7 +527,7 @@ class InterestingClass:
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
 ##################### weightless ####################
         left_admin_container_children.append(
-            dbc.Row([dbc.Col()], id="WeightlessSections"))
+            dbc.Row([], id="WeightlessSections"))
 
 
 ######################################################
@@ -731,18 +731,17 @@ dbc.Col([]
         container_children.append(dcc.Store(id="StoreTeamTable", data=[], storage_type="local"))
         container_children.append(dcc.Location(id="url"))
         container_children.append(dcc.Interval(interval=60000, id="Interval"))
-        container_children.append(dbc.Modal(
+        container_children.append(html.Div([dbc.Modal(
             [],
             id="MassageOnAdd",
             size="lg",
             is_open=False,
-        ))
-        container_children.append(dbc.Modal(
+        ), dbc.Modal(
             [],
             id="MassageOnSubmit",
             size="lg",
             is_open=False,
-        ))
+        )], className="modalDiv"))
         container_children.append(html.Div(children=[html.Button("Сформувати протоколи", id="ComposeProtocols"),
                                                      dash_table.DataTable(id="ProtocolsOutput"),
                                                      html.Div(children=[],id="ComposeProtocolsProgress")],
@@ -753,11 +752,6 @@ dbc.Col([]
 
     def get_app(self, server, url):
         self.url = url
-        # celery_app = celery.Celery(__name__,
-        # broker="redis://localhost:6379/0",
-        # backend="redis://localhost:6379/0")
-
-        # long_callback_manager = CeleryManager(celery_app=celery_app)
         cache = diskcache.Cache("./cache")
         long_callback_manager = DiskcacheManager(cache)
         app = Dash(__name__, url_base_pathname=url,
@@ -768,7 +762,7 @@ dbc.Col([]
         app.css.config.serve_locally = True
         app.scripts.config.serve_locally = True
         app.layout = self.get_layout()
-        app.config['suppress_callback_exceptions'] = False
+        app.config['suppress_callback_exceptions'] = True
 
         @app.callback([Output("LatterPattern", "style"),
                        Output("LatterExample", "style")],
