@@ -51,6 +51,9 @@ from dash import DiskcacheManager
 import diskcache
 # from chardet import detect
 from app.util.excel_writer import ExcelWriter
+import zipfile
+
+
 TOGGLE_LABEL_DICT= {False: "Учасники чекають на запрошення", True: "Запрошення розіслані!"}
 LATTER_PATTERN ="""Шановний LEADER_COACH_NAME!
         Маю за честь запросити Вас і Вашу команду до участі у змаганнях "COMPETITION_TITLE".
@@ -743,7 +746,7 @@ dbc.Col([]
             is_open=False,
         )], className="modalDiv"))
         container_children.append(html.Div(children=[html.Button("Сформувати протоколи", id="ComposeProtocols"),
-                                                     dash_table.DataTable(id="ProtocolsOutput"),
+                                                     dcc.Download(id="ProtocolsOutput"),
                                                      html.Div(children=[],id="ComposeProtocolsProgress")],
                                            id="ComposeProtocolsContainer",
                                            hidden=True))
@@ -820,7 +823,7 @@ dbc.Col([]
                 os.mkdir(this_competition_inv_dir)
             if callback_context.triggered_id == "SendInvitations":
                 for idx_ in range(len(names_)):
-                    sender = MailSender(parameter["mailer"], [emails_[idx_]])
+                    sender = MailSender(parameter["mailer"], [emails_[idx_], parameter["club_email"]])
                     password = self.generate_secure_password()
                     message = self.compose_mail(names, emails, competition_date, deadline, title, pattern, password, idx=idx_)
                     files = []
@@ -1123,7 +1126,7 @@ dbc.Col([]
                     n_members = len(set(members_lst))
                     n_sections = df["total_sections"].sum()
                     n_only_one_section = (df["total_sections"] == 1).sum()
-                    sender = MailSender(parameter["mailer"], [current_user.id])
+                    sender = MailSender(parameter["mailer"], [current_user.id, parameter["club_email"]])
                     message = self.get_massage_on_submission(n_members, n_sections, n_only_one_section, competition_title)
                     df.drop(columns=["total_sections"], inplace=True)
                     file = os.path.join(this_competition_submission_dir, current_user.id + ".csv")
@@ -1197,10 +1200,10 @@ dbc.Col([]
                                         full_dic[title_] = [df__]
                             else:
                                 for weight, weight_b in zip(weight_labels, weight_bins):
-                                    m1 = df_["age_cuts"] == age_b
-                                    m2 = df_["Категорія"] == cat
-                                    m3 = df_[sec] == "+"
-                                    m4 = df_["weight_cuts"] == weight_b
+                                    # m1 = df_["age_cuts"] == age_b
+                                    # m2 = df_["Категорія"] == cat
+                                    # m3 = df_[sec] == "+"
+                                    # m4 = df_["weight_cuts"] == weight_b
                                     mask = ((df_["age_cuts"] == age_b) & (df_["weight_cuts"] == weight_b)
                                             & (df_["Категорія"] == cat) & (df_[sec] == "+"))
                                     df__ = df_.loc[mask]
@@ -1215,15 +1218,33 @@ dbc.Col([]
 
             protocols_dir = self.get_protocols_dir(deadline, competition_date)
             excel_writer = ExcelWriter(competition_title, chief_secretary, chief_judge, protocols_dir)
-            print("FULL_DIC "*9)
-            print(full_dic["Куміте Хлопці (категорія B,  10-11 років  30-59кг)"])
 
             protocol_dict = self.compose_protocols_(full_dic)
+            files_attach = []
             for key in protocol_dict.keys():
                 df = protocol_dict[key]
-                # df.to_csv(os.path.join(protocols_dir, key+".csv"), index=False)
+                # file_ = os.path.join(protocols_dir, key+".csv")
+                # df.to_csv(file_, index=False)
                 excel_writer.write_style(df, key)
-            return dash.no_update
+            sender = MailSender(parameter["mailer"], [parameter["club_email"]])
+            message = """
+            Привітики. Протоколи в додатку.
+            Цьом.
+            """
+            sender.send_mail(f"Протоколи {datetime.now()}", message, files_attach)
+            zip_path = f"{protocols_dir}.zip"
+
+            # Create a zip file
+            with zipfile.ZipFile(zip_path, 'w') as zipf:
+                for root, dirs, files in os.walk(protocols_dir):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        # Add file to the zip, maintaining directory structure
+                        arcname = os.path.relpath(file_path, protocols_dir)
+                        zipf.write(file_path, arcname)
+
+            # Return the zip file for download
+            return dcc.send_file(zip_path)
 
         @app.callback(Output("CategoriesNamesHidden", "children"),
                       Input("CategoriesNames", "value"))
