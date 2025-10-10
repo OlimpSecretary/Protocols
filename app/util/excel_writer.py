@@ -31,13 +31,13 @@ class ExcelWriter:
             index1 = index0 + 1
             index2 = index0 + 2
             ws[f'A{index1}'].font = header_font
-            ws[f'A{index1}'].alignment = Alignment(horizontal='center')
+            ws[f'A{index1}'].alignment = Alignment(horizontal='center', wrapText=True)
             ws[f'A{index1}'] = self.competition_title
-            ws.row_dimensions[1].height = 25
+            ws.row_dimensions[1].height = 65
             ws[f'A{index2}'].font = header_font
-            ws[f'A{index2}'].alignment = Alignment(horizontal='center')
+            ws[f'A{index2}'].alignment = Alignment(horizontal='center', wrapText=True)
             ws[f'A{index2}'] = title if pages_total == 1 else title + f"(стор. {page+1})"
-            ws.row_dimensions[1].height = 25
+            ws.row_dimensions[1].height = 65
 
             # Merge cells from A1 to C1 (inclusive)
             ws.merge_cells(f'A{index1}:D{index1}')

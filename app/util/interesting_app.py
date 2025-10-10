@@ -1318,7 +1318,7 @@ dbc.Col([]
                                             full_dic[title_] = [df__]
 
             protocols_dir = self.get_protocols_dir(deadline, competition_date)
-            excel_writer = ExcelWriter(competition_title, chief_secretary, chief_judge, protocols_dir)
+            excel_writer = ExcelWriter(competition_title+f"\n({competition_date.replace('-','.')})", chief_secretary, chief_judge, protocols_dir)
             protocol_dict = self.compose_protocols_(full_dic)
             files_attach = []
             progress_percent = 92
