@@ -53,7 +53,7 @@ import diskcache
 # from chardet import detect
 from app.util.excel_writer import ExcelWriter
 import zipfile
-import dash_mantine_components as dmc
+# import dash_mantine_components as dmc
 
 TOGGLE_LABEL_DICT= {False: "Учасники чекають на запрошення", True: "Запрошення розіслані!"}
 LATTER_PATTERN ="""Шановний LEADER_COACH_NAME!
