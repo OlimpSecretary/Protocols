@@ -118,11 +118,31 @@ class InterestingClass:
 
     @staticmethod
     def split_opponents(df):
-
         # Sort for max and min streams
-        df_max = df.sort_values(["count", "team-lead", "Учасник"], ascending=False).reset_index(drop=True)
-        df_min = df.sort_values(["count", "team-lead", "Учасник"], ascending=True).reset_index(drop=True)
+        df_max = df.sort_values(["count", "Команда", "Учасник"], ascending=False).reset_index(drop=True)
+        df_min = df.sort_values(["count", "Команда", "Учасник"], ascending=True).reset_index(drop=True)
         n = df.shape[0] // 2
+        df_min_ = df_min.iloc[:n]
+        df_max_ = df_max.iloc[:n]
+
+        mask = df_max_["Команда"] == df_min_["Команда"]
+        df_min_c = df_min_.loc[mask]
+        df_min_n = df_min_.loc[~mask]
+        n_c = min(df_min_c.shape[0], df_min_n.shape[0])
+        for idx_c, idx_n in zip(df_min_c.iloc[:n_c].index, df_min_n.iloc[:n_c].index):
+            df_min.loc[idx_c], df_min.loc[idx_n] = df_min.loc[idx_n].copy(), df_min.loc[idx_c].copy()
+        # coinside_n = mask.sum()
+        # if coinside_n != 0:
+        #     for iter in range(12):
+        #         df_min_ = df_min.sample(frac=1)
+        #         mask = df_max["Команда"].iloc[:n] == df_min["Команда"].iloc[:n]
+        #         coinside_n_ = mask.sum()
+        #         if coinside_n_ == 0:
+        #             df_min = df_min_
+        #             break
+        #         if coinside_n_ < coinside_n:
+        #             df_min = df_min_
+        #             coinside_n = coinside_n_
         df_interleaved = pd.concat([df_max.iloc[:n], df_min.iloc[:n]]).sort_index(kind="merge").reset_index(drop=True)
         if 2*n < df.shape[0]:
             df_interleaved = pd.concat([df_interleaved, df_max.iloc[n:n+1,:]]).reset_index(drop=True)
@@ -1182,8 +1202,9 @@ dbc.Col([]
                                    , State("CompetitionDate", "value")
                           , State("CompetitionTitle", "value")
                        ,State("CoachName", "value")
+                          , State("TeamName", "value")
                        ], prevent_initial_call=True)
-        def on_submit(n_clicks, help_clicks, team_table_data, deadline, competition_date, competition_title, coach_name):
+        def on_submit(n_clicks, help_clicks, team_table_data, deadline, competition_date, competition_title, coach_name, team_name):
             if not hasattr(current_user, "permission"):
                 redirect("/")
             if callback_context.triggered_id == "HelpButton":
@@ -1197,6 +1218,7 @@ dbc.Col([]
                 this_competition_submission_dir = self.get_submission_dir(deadline, competition_date)
 
                 df = pd.DataFrame(team_table_data)
+                df["Команда"] = team_name
                 # df_ = df.set_index.iloc[5:]
                 df["total_sections"] = df.apply(lambda l: (l == "+").sum(), axis=1)
                 if (df["total_sections"] == 0).any():
@@ -1370,19 +1392,19 @@ dbc.Col([]
         #         return dash.no_update, f"Не правильна дата народження учасника. Вік учасника може бути від {min_age} до 18"
 
         @app.callback(Output("CategoriesNamesHidden", "children"),
-                      Input("CategoriesNames", "value"))
+                      Input("CategoriesNames", "value"), prevent_initial_callback=True)
         def dump_categories(categories):
             self.modify_config_file("categories_names_lst", [c.lstrip().rstrip() for c in categories.split(",")])
             return dash.no_update
 
         @app.callback(Output("CategoriesWeightHidden", "children"),
-                      Input("CategoriesWeight", "value"))
+                      Input("CategoriesWeight", "value"), prevent_initial_callback=True)
         def dump_category_weight(categories):
             self.modify_config_file("categories_weight_lst", [c.lstrip().rstrip() for c in categories.split(",")])
             return dash.no_update
 
         @app.callback(Output("CategoriesAgeHidden", "children"),
-                      Input("CategoriesAge", "value"))
+                      Input("CategoriesAge", "value"), prevent_initial_callback=True)
         def dump_category_age(categories):
             self.modify_config_file("categories_age_lst", [c.lstrip().rstrip() for c in categories.split(",")])
             return dash.no_update

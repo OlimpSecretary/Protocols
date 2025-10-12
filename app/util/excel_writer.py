@@ -52,36 +52,41 @@ class ExcelWriter:
             for half_row in range(index0//3, self.partners_per_page+index0//3):
                 # Draw a diagonal line (top-left to bottom-right)
                 ws[f'B{3 * half_row + 4}'].border = thin_border
+                ws[f'C{3 * half_row + 4}'].border = thin_border
                 # idx = 2*half_row
                 if df_index in df.index:
-                    ws[f'B{3 * half_row + 4}'].value = df.loc[df_index, "Учасник"]
+                    ws[f'B{3 * half_row + 4}'].value = df.loc[df_index, "Команда"]
+                    ws[f'C{3 * half_row + 4}'].value = df.loc[df_index, "Учасник"]
                 ws[f'A{3 * half_row + 4}'] = f"{df_index+1} aka"
                 df_index += 1
                 ws[f'B{3 * half_row + 5}'].border = thin_border
+                ws[f'C{3 * half_row + 5}'].border = thin_border
                 # idx = 2*half_row+1
                 if df_index in df.index:
-                    ws[f'B{3 * half_row + 5}'].value = df.loc[df_index, "Учасник"]
+                    ws[f'B{3 * half_row + 5}'].value = df.loc[df_index, "Команда"]
+                    ws[f'C{3 * half_row + 5}'].value = df.loc[df_index, "Учасник"]
                 ws[f'A{3 * half_row + 5}'] = f"{df_index+1} sira"
                 df_index += 1
-                ws[f'C{3*half_row+5}'].border = Border(diagonalUp=True, diagonal=Side(style='thin'))
-                ws[f'C{3*half_row+4}'].border = Border(diagonalDown=True, diagonal=Side(style='thin'))
-                ws[f'D{3 * half_row + 4}'].border = Border(bottom=Side(style='thin'))
+                ws[f'D{3*half_row+5}'].border = Border(diagonalUp=True, diagonal=Side(style='thin'))
+                ws[f'D{3*half_row+4}'].border = Border(diagonalDown=True, diagonal=Side(style='thin'))
+                ws[f'E{3 * half_row + 4}'].border = Border(bottom=Side(style='thin'))
 
 
             ws[f'B{footer_idx}'].border = Border(bottom=Side(style='thin'))
-            ws[f'D{footer_idx}'].border = Border(bottom=Side(style='thin'))
+            ws[f'E{footer_idx}'].border = Border(bottom=Side(style='thin'))
             ws[f'B{footer_idx}'].value = self.main_judge
-            ws[f'D{footer_idx}'].value = self.main_secretary
+            ws[f'E{footer_idx}'].value = self.main_secretary
             ws[f'B{footer_idx + 1}'].value = "Головний Суддя"
-            ws[f'D{footer_idx + 1}'].value = "Головний Секрктар"
+            ws[f'E{footer_idx + 1}'].value = "Головний Секрктар"
             ws.row_dimensions[footer_idx + 1].height = 20
 
             footer_idx += footer_idx0+2
             # break
-        ws.column_dimensions['A'].width = 7
-        ws.column_dimensions['B'].width = 30
-        ws.column_dimensions['C'].width = 10
-        ws.column_dimensions['D'].width = 30
+        ws.column_dimensions['A'].width = 5
+        ws.column_dimensions['B'].width = 20
+        ws.column_dimensions['C'].width = 25
+        ws.column_dimensions['D'].width = 10
+        ws.column_dimensions['E'].width = 20
         wb.save(path_join(self.data_dir, f"{title}.xlsx"))
 
 #
