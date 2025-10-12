@@ -441,7 +441,7 @@ class InterestingClass:
                             id="CategoriesNames",
                             value=", ".join(parameter["categories_names_lst"]),
                             style={'width': '200px', 'height': 30, 'minWidth': '200px'}
-                        # , persistence=True
+                        , persistence=True
                         )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
                     width='auto'
@@ -486,7 +486,7 @@ class InterestingClass:
                                                                                        'margin-right': '2%'}),
                                                     dcc.Input(id="CategoriesAge", value=", ".join(parameter["categories_age_lst"]),
                                                               style={'width': '40%', 'height': 30, 'minWidth': '30px'}
-                                                              # , persistence=True
+                                                              , persistence=True
                                                               )], width=5
                                                    , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ############## ВАГОВІ КАТЕГОРІЇ ########################
@@ -525,7 +525,7 @@ class InterestingClass:
                                                dcc.Input(id="CategoriesWeightGirl",
                                                          value=", ".join(parameter["categories_weight_lst"]),
                                                          style={'width': '40%', 'height': 30, 'minWidth': '200px'}
-                                                         # , persistence=True
+                                                         , persistence=True
                                                          )], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ################ хлопці
@@ -568,7 +568,7 @@ class InterestingClass:
                                                                              parameter["categories_weight_lst"]),
                                                                          style={'width': '40%', 'height': 30,
                                                                                 'minWidth': '200px'}
-                                                                         # , persistence=True
+                                                                         , persistence=True
                                                                          )], width='auto'
                                                               , style={'display': 'flex', 'alignItems': 'center'})],
                                                      className="mb-3"))
