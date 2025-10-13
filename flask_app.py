@@ -84,9 +84,9 @@ interesting_d_obj = InterestingClass("/", """СТОРІНКА ДЛЯ ПОДАН�
                                      DEFAULT_SESSION_DURATION, fig_ext="jpg")
 interesting_d_app = interesting_d_obj.get_app(app, "/home/")
 
-app.config['REMEMBER_COOKIE_DURATION'] = timedelta(minutes=DEFAULT_SESSION_DURATION)  # expire after DEFAULT_SESSION_DURATION min
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=DEFAULT_SESSION_DURATION)
-app.config["SESSION_PERMANENT"] = False
+# app.config['REMEMBER_COOKIE_DURATION'] = timedelta(minutes=DEFAULT_SESSION_DURATION)  # expire after DEFAULT_SESSION_DURATION min
+# app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=DEFAULT_SESSION_DURATION)
+app.config["SESSION_PERMANENT"] = True
 
 if __name__ == '__main__':
     app.run(port=5550, debug=True)#, extra_files=extra_files_lst)

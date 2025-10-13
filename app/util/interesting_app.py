@@ -382,7 +382,7 @@ class InterestingClass:
         left_admin_container_children.append(dbc.Row([dbc.Col([dbc.Label("Назва змагань")], width='auto'), dbc.Col([ dcc.Textarea(
             id="CompetitionTitle",
             value=parameter["competition_title"],
-            # persistence=True,
+            persistence=True,
             # persistence_type="local",
             style={'width': '70%', 'height': 60, 'minWidth': '200px'} # Adjust height as needed
         )], width='auto'),], className="mb-3"))
@@ -403,7 +403,7 @@ class InterestingClass:
                     # initial_visible_month=MIN_DATE,
                     # minDate=
                     value=parameter["deadline"],
-                    # persistence = True,
+                    persistence = True,
                     # persistence_type = 'local'
                     )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
@@ -419,7 +419,7 @@ class InterestingClass:
                             min=MIN_DATE,
                             max=MAX_DATE,
                             value=parameter["competition_date"],
-                            # persistence = True,
+                            persistence = True,
                             # persistence_type = 'local'
                         )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
@@ -455,7 +455,7 @@ class InterestingClass:
                             id="CategoriesNames",
                             value=", ".join(parameter["categories_names_lst"]),
                             style={'width': '200px', 'height': 30, 'minWidth': '200px'}
-                        # , persistence=True
+                        , persistence=True
                         )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
                     width='auto'
@@ -500,81 +500,83 @@ class InterestingClass:
                                                                                        'margin-right': '2%'}),
                                                     dcc.Input(id="CategoriesAge", value=", ".join(parameter["categories_age_lst"]),
                                                               style={'width': '40%', 'height': 30, 'minWidth': '30px'}
-                                                              # , persistence=True
+                                                              , persistence=True
                                                               )], width=5
                                                    , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ############## ВАГОВІ КАТЕГОРІЇ ########################
         ################ дівчата
-        left_admin_container_children.append(dbc.Row([dbc.Col([dbc.Label("Кількість(дівчата)",
-                                                             style={'display': 'inline-block',
-                                                                    'margin-left': '5%', 'margin-right': '2%'}),
-                                                    dcc.Input(
-                                                        id='WeightNumberGirl',
-                                                        value=4,
-                                                        type='number',
-                                                        min=1,
-                                                        max=10,
-                                                        style={'width': '16%', 'height': 30, 'minWidth': '40px'}  # Adjust height as needed
-                                                        , persistence=True),
-                                                    dbc.Label("Супер-тяж-вага(дівчата)",
-                                                             style={'display': 'inline-block',
-                                                                    'margin-left': '5%',
-                                                                    'margin-right': '2%'}),
-                                                    dcc.Input(
-                                                        id='MaxWeightGirl',
-                                                        value=60,
-                                                        type='number',
-                                                        min=30,
-                                                        max=120,
-                                                        style={'width': '11%', 'height': 30, 'minWidth': '40px'}
-                                                        # Adjust height as needed
-                                                        , persistence=True
-                                                    ),
-
-                                                    ],
-                                                   width='auto',
-                                                   style={"display": "flex", "alignItems": "center"}),
+        left_admin_container_children.append(dbc.Row([
+            # dbc.Col([dbc.Label("Кількість(дівчата)",
+            #                                                  style={'display': 'inline-block',
+            #                                                         'margin-left': '5%', 'margin-right': '2%'}),
+            #                                         dcc.Input(
+            #                                             id='WeightNumberGirl',
+            #                                             value=4,
+            #                                             type='number',
+            #                                             min=1,
+            #                                             max=10,
+            #                                             style={'width': '16%', 'height': 30, 'minWidth': '40px'}  # Adjust height as needed
+            #                                             , persistence=True),
+            #                                         dbc.Label("Супер-тяж-вага(дівчата)",
+            #                                                  style={'display': 'inline-block',
+            #                                                         'margin-left': '5%',
+            #                                                         'margin-right': '2%'}),
+            #                                         dcc.Input(
+            #                                             id='MaxWeightGirl',
+            #                                             value=60,
+            #                                             type='number',
+            #                                             min=30,
+            #                                             max=120,
+            #                                             style={'width': '11%', 'height': 30, 'minWidth': '40px'}
+            #                                             # Adjust height as needed
+            #                                             , persistence=True
+            #                                         ),
+            #
+            #                                         ],
+            #                                        width='auto',
+            #                                        style={"display": "flex", "alignItems": "center"}),
 
                                            dbc.Col([html.Div(hidden=True, id="CategoriesWeightGirlHidden"),
                                                dbc.Label("Вагові категорії(дівчата)"),
                                                dcc.Input(id="CategoriesWeightGirl",
                                                          value=", ".join(parameter["categories_weight_girl_lst"]),
                                                          style={'width': '40%', 'height': 30, 'minWidth': '200px'}
-                                                         # , persistence=True
+                                                         , persistence=True
                                                          )], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ################ хлопці
-        left_admin_container_children.append(dbc.Row([dbc.Col([dbc.Label("Кількість(хлопці)",
-                                                                         style={'display': 'inline-block',
-                                                                                'margin-left': '5%',
-                                                                                'margin-right': '2%'}),
-                                                               dcc.Input(
-                                                                   id='WeightNumberBoy',
-                                                                   value=4,
-                                                                   type='number',
-                                                                   min=1,
-                                                                   max=10,
-                                                                   style={'width': '16%', 'height': 30,
-                                                                          'minWidth': '40px'}  # Adjust height as needed
-                                                                   , persistence=True),
-                                                               dbc.Label("Супер-тяж-вага(хлопці)",
-                                                                         style={'display': 'inline-block',
-                                                                                'margin-left': '5%',
-                                                                                'margin-right': '2%'}),
-                                                               dcc.Input(
-                                                                   id='MaxWeightBoy',
-                                                                   value=60,
-                                                                   type='number',
-                                                                   min=30,
-                                                                   max=120,
-                                                                   style={'width': '11%', 'height': 30,
-                                                                          'minWidth': '40px'}
-                                                                   # Adjust height as needed
-                                                                   , persistence=True),
-
-                                                               ],
-                                                              width='auto',
-                                                              style={"display": "flex", "alignItems": "center"}),
+        left_admin_container_children.append(dbc.Row([
+            # dbc.Col([dbc.Label("Кількість(хлопці)",
+            #                                                              style={'display': 'inline-block',
+            #                                                                     'margin-left': '5%',
+            #                                                                     'margin-right': '2%'}),
+            #                                                    dcc.Input(
+            #                                                        id='WeightNumberBoy',
+            #                                                        value=4,
+            #                                                        type='number',
+            #                                                        min=1,
+            #                                                        max=10,
+            #                                                        style={'width': '16%', 'height': 30,
+            #                                                               'minWidth': '40px'}  # Adjust height as needed
+            #                                                        , persistence=True),
+            #                                                    dbc.Label("Супер-тяж-вага(хлопці)",
+            #                                                              style={'display': 'inline-block',
+            #                                                                     'margin-left': '5%',
+            #                                                                     'margin-right': '2%'}),
+            #                                                    dcc.Input(
+            #                                                        id='MaxWeightBoy',
+            #                                                        value=60,
+            #                                                        type='number',
+            #                                                        min=30,
+            #                                                        max=120,
+            #                                                        style={'width': '11%', 'height': 30,
+            #                                                               'minWidth': '40px'}
+            #                                                        # Adjust height as needed
+            #                                                        , persistence=True),
+            #
+            #                                                    ],
+            #                                                   width='auto',
+            #                                                   style={"display": "flex", "alignItems": "center"}),
 
                                                       dbc.Col([html.Div(hidden=True, id="CategoriesWeightBoyHidden"),
                                                                dbc.Label("Вагові категорії(хлопці)"),
@@ -583,7 +585,7 @@ class InterestingClass:
                                                                              parameter["categories_weight_boy_lst"]),
                                                                          style={'width': '40%', 'height': 30,
                                                                                 'minWidth': '200px'}
-                                                                         # , persistence=True
+                                                                         , persistence=True
                                                                          )], width='auto'
                                                               , style={'display': 'flex', 'alignItems': 'center'})],
                                                      className="mb-3"))
@@ -594,8 +596,8 @@ class InterestingClass:
                                                         id='SexCuts',
                                                         value=", ".join(parameter["sex_cuts_lst"]),
                                                         style={'width': '40%', 'height': 30, 'minWidth': '180px'}  # Adjust height as needed
-                                                        # , persistence=True
-                                                        , persistence_type='local'
+                                                        , persistence=False
+                                                        # , persistence_type='local'
                                                     ),
                                                     ],
                                                    width='auto',
@@ -607,7 +609,7 @@ class InterestingClass:
                                                dcc.Input(id="Sections",
                                                          value=", ".join(parameter["sections_all_lst"]),
                                                          style={'width': '50%', 'height': 30, 'minWidth': '200px'}
-                                                         # , persistence=True
+                                                         , persistence=True
                                                          )], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
 ##################### weightless ####################
@@ -831,6 +833,8 @@ dbc.Col([]
         container_children.append(dcc.Store(id="SetSectionDirectly", data=[]))
         container_children.append(dcc.Store(id="StoreTeamTable", data=[], storage_type="local"))
         container_children.append(dcc.Location(id="url"))
+        container_children.append(dcc.Location(id="url-new"))
+
         container_children.append(dcc.Interval(interval=60000, id="Interval"))
         container_children.append(html.Div([dbc.Modal(
             [],
@@ -1104,27 +1108,27 @@ dbc.Col([]
             categories_age_lst.append(f"{max_age}+")
             return ", ".join(categories_age_lst)
 
-        @app.callback(Output("CategoriesWeightGirl", "value"),
-                      [Input("MaxWeightGirl", "value"),
-                       Input("WeightNumberGirl", "value")], prevent_initial_call=True)
-        def submit_weights(max_weight, weights_number):
-            step = max_weight//weights_number
-            start = max_weight % weights_number
-            categories_weight_lst = [f"{a1}-{min(a2, max_weight)-1}" for a1, a2 in zip(range(start, max_weight, step), range(step+start, max_weight+step, step)) if (a1 != min(a2, max_weight)-1)]
-            categories_weight_lst.append(f"{max_weight}+")
-            return ", ".join(categories_weight_lst)
+        # @app.callback(Output("CategoriesWeightGirl", "value"),
+        #               [Input("MaxWeightGirl", "value"),
+        #                Input("WeightNumberGirl", "value")], prevent_initial_call=True)
+        # def submit_weights(max_weight, weights_number):
+        #     step = max_weight//weights_number
+        #     start = max_weight % weights_number
+        #     categories_weight_lst = [f"{a1}-{min(a2, max_weight)-1}" for a1, a2 in zip(range(start, max_weight, step), range(step+start, max_weight+step, step)) if (a1 != min(a2, max_weight)-1)]
+        #     categories_weight_lst.append(f"{max_weight}+")
+        #     return ", ".join(categories_weight_lst)
 
-        @app.callback(Output("CategoriesWeightBoy", "value"),
-                      [Input("MaxWeightBoy", "value"),
-                       Input("WeightNumberBoy", "value")], prevent_initial_call=True)
-        def submit_weights(max_weight, weights_number):
-            step = max_weight // weights_number
-            start = max_weight % weights_number
-            categories_weight_lst = [f"{a1}-{min(a2, max_weight) - 1}" for a1, a2 in
-                                     zip(range(start, max_weight, step), range(step + start, max_weight + step, step))
-                                     if (a1 != min(a2, max_weight) - 1)]
-            categories_weight_lst.append(f"{max_weight}+")
-            return ", ".join(categories_weight_lst)
+        # @app.callback(Output("CategoriesWeightBoy", "value"),
+        #               [Input("MaxWeightBoy", "value"),
+        #                Input("WeightNumberBoy", "value")]) #prevent_initial_call=True)
+        # def submit_weights(max_weight, weights_number):
+        #     step = max_weight // weights_number
+        #     start = max_weight % weights_number
+        #     categories_weight_lst = [f"{a1}-{min(a2, max_weight) - 1}" for a1, a2 in
+        #                              zip(range(start, max_weight, step), range(step + start, max_weight + step, step))
+        #                              if (a1 != min(a2, max_weight) - 1)]
+        #     categories_weight_lst.append(f"{max_weight}+")
+        #     return ", ".join(categories_weight_lst)
 
         @app.callback([Output("TeamTable", "data"),
                        Output("MassageOnAdd", "children"),
@@ -1157,9 +1161,7 @@ dbc.Col([]
             if (callback_context.triggered_id == "RemoveMemberButton") and selected_rows:
                 table_data.pop(selected_rows[0])
                 return  table_data, dash.no_update, dash.no_update
-            # if not n_click:
-            #     return dash.no_update, dash.no_update
-            # print(sections_ch)
+
             if isinstance(sections_ch, list):
                 sections_ch = sections_ch[0]
             sections = sections_ch["props"].get("value", [])
@@ -1175,6 +1177,7 @@ dbc.Col([]
             ], True
             # print(sections)
             sections_all = sum(sections_all, [])
+
             columns = (["Учасник", "Дата народження", "Вага", "Категорія", "Стать"] + sections_all) if  (table_columns is None) else dash.no_update
             dict_ = {"Учасник": name, "Дата народження": str(birthdate), "Вага": weight, "Категорія": category, "Стать": sex}
 
@@ -1492,7 +1495,9 @@ dbc.Col([]
         @app.callback(Output("CategoriesWeightBoyHidden", "children"),
                       Input("CategoriesWeightBoy", "value"), prevent_initial_call=True)
         def dump_category_weight(categories):
-            self.modify_config_file("categories_weight_boy_lst", [c.lstrip().rstrip() for c in categories.split(",")])
+            list_ = [c.lstrip().rstrip() for c in categories.split(",")]
+            parameter["categories_weight_boy_lst"] = list_
+            self.modify_config_file("categories_weight_boy_lst", list_)
             return dash.no_update
 
         @app.callback(Output("CategoriesWeightGirlHidden", "children"),
@@ -1514,11 +1519,15 @@ dbc.Col([]
             self.modify_config_file("sections_all_lst", [s.rstrip().lstrip() for s in sections.split(",")])
             return dash.no_update
 
-        # @app.callback([Output("Sections-CheckedHidden", "children")]
-        #     , [Input("Sections-Checked", "value"), Input("SexCuts", "value")])
-        # def dump_sections(sections, sex_cuts):
-        #     self.modify_config_file("sections_all_lst", [s.rstrip().lstrip() for s in sections.split(",")])
-        #     return dash.no_update
+        # @app.callback([Output("CategoriesWeightBoy", "value")]
+        #     , [Input("url-new", "pathname")])
+        # def dump_sections(pathname):
+        #     return ", ".join(parameter["categories_weight_boy_lst"])
+        #
+        # @app.callback([Output("CategoriesWeightGirl", "value")]
+        #     , [Input("url-new", "pathname")])
+        # def dump_sections(pathname):
+        #     return ", ".join(parameter["categories_weight_girl_lst"])
 
 
         @app.callback([Output("SexCutsHidden", "children")]
@@ -1527,6 +1536,10 @@ dbc.Col([]
             self.modify_config_file("sex_cuts_lst", [s.lstrip().rstrip() for s in sex_cuts.split(",")])
             return dash.no_update
 
+        @app.server.after_request
+        def add_header(response):
+            response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+            return response
 
         return app
 
