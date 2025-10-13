@@ -596,7 +596,7 @@ class InterestingClass:
                                                         id='SexCuts',
                                                         value=", ".join(parameter["sex_cuts_lst"]),
                                                         style={'width': '40%', 'height': 30, 'minWidth': '180px'}  # Adjust height as needed
-                                                        , persistence=False
+                                                        , persistence=True
                                                         # , persistence_type='local'
                                                     ),
                                                     ],
