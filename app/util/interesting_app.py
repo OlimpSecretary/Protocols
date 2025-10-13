@@ -208,6 +208,7 @@ class InterestingClass:
 
     @staticmethod
     def modify_config_file(key, value):
+        parameter[key] = value
         with open(parameter["config-path"], "r") as f:
             users_json = json.load(f)
             users_json[key] = value
@@ -343,8 +344,8 @@ class InterestingClass:
             children_.append(html.Div(label_))
         children_.append(dbc.Col(dcc.Checklist(
                 list_,
-                list_
-                , persistence=True
+                value=parameter["weightless_sections_lst"]
+                # , persistence=True
                 , style={"margin-left": "10%"}, id="Weightless-check")
                 , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
         return children_
@@ -355,8 +356,8 @@ class InterestingClass:
             children_.append(html.Div(label_))
         children_.append(dbc.Col(dcc.Checklist(
             list_,
-            list_
-            , persistence=True
+            value=parameter["no_category_sections_lst"]
+            # , persistence=True
             , style={"margin-left": "10%"}, id="NoCategory-check")
             , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
         return children_
@@ -613,8 +614,12 @@ class InterestingClass:
         left_admin_container_children.append(
             dbc.Row([], id="WeightlessSections"))
         left_admin_container_children.append(
+            dbc.Row([], id="WeightlessSectionsHidden", style={'display':'none'}))
+##
+        left_admin_container_children.append(
             dbc.Row([], id="NoCategorySections"))
-
+        left_admin_container_children.append(
+            dbc.Row([], id="NoCategorySectionsHidden", style={'display':'none'}))
 
 ######################################################
         left_admin_container_children.append(
@@ -1043,14 +1048,27 @@ dbc.Col([]
         @app.callback(Output("NoCategorySections", "children"),
                       [Input("Sections", "value")
                        ])
-        def submit_nocategory_sections(categories):
+        def submit_nocategory_sections(sections):
             no_category_lst = []
-            for id_idx, cat in enumerate(categories.split(",")):
-                no_category_lst.append(cat.rstrip().lstrip())
+            for id_idx, sec in enumerate(sections.split(",")):
+                no_category_lst.append(sec.rstrip().lstrip())
             if no_category_lst:
                 return self._get_no_category_checklists(no_category_lst, "Без категорій")
             else:
                 return dash.no_update
+
+        @app.callback(Output("WeightlessSectionsHidden", "children"),
+                       [Input("Weightless-check", "value")], prevent_initial_call=True)
+        def dump_weightless(weightless_sections):
+            self.modify_config_file("weightless_sections_lst", weightless_sections)
+            return dash.no_update
+
+        @app.callback(Output("NoCategorySectionsHidden", "children"),
+                       [Input("NoCategory-check", "value")], prevent_initial_call=True)
+        def dump_no_category(no_category_sections):
+            self.modify_config_file("no_category_sections_lst", no_category_sections)
+            return dash.no_update
+
 
         @app.callback([Output("SectionLists", "children"),
                        Output("WeightlessSections", "children")],
@@ -1490,15 +1508,18 @@ dbc.Col([]
             return dash.no_update
 
         @app.callback([Output("SectionsHidden", "children")]
-            , [Input("Sections", "value"), Input("SexCuts", "value")])
+            , [Input("Sections", "value"),
+               Input("SexCuts", "value")], prevent_initial_call=True)
         def dump_sections(sections, sex_cuts):
             self.modify_config_file("sections_all_lst", [s.rstrip().lstrip() for s in sections.split(",")])
-            # lists_ = []
-            # for id_idx, sec in enumerate(sections.split(",")):
-            #     lists_.append([f"{sec.rstrip().lstrip()} {g.rstrip().lstrip()}" for g in sex_cuts.split(",")])
-            # if lists_:
-            #     self.modify_config_file("sections_all_lst", lists_)
             return dash.no_update
+
+        # @app.callback([Output("Sections-CheckedHidden", "children")]
+        #     , [Input("Sections-Checked", "value"), Input("SexCuts", "value")])
+        # def dump_sections(sections, sex_cuts):
+        #     self.modify_config_file("sections_all_lst", [s.rstrip().lstrip() for s in sections.split(",")])
+        #     return dash.no_update
+
 
         @app.callback([Output("SexCutsHidden", "children")]
             , [Input("SexCuts", "value")])
