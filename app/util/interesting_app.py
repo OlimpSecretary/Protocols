@@ -349,6 +349,18 @@ class InterestingClass:
                 , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
         return children_
 
+    def _get_no_category_checklists(self, list_, label_=None):
+        children_ = []
+        if label_ is not None:
+            children_.append(html.Div(label_))
+        children_.append(dbc.Col(dcc.Checklist(
+            list_,
+            list_
+            , persistence=True
+            , style={"margin-left": "10%"}, id="NoCategory-check")
+            , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"))
+        return children_
+
     def _get_checklists(self, lists_):
         children_ = []
         for idx, lst_ in enumerate(lists_):
@@ -369,8 +381,8 @@ class InterestingClass:
         left_admin_container_children.append(dbc.Row([dbc.Col([dbc.Label("Назва змагань")], width='auto'), dbc.Col([ dcc.Textarea(
             id="CompetitionTitle",
             value=parameter["competition_title"],
-            persistence=True,
-            persistence_type="local",
+            # persistence=True,
+            # persistence_type="local",
             style={'width': '70%', 'height': 60, 'minWidth': '200px'} # Adjust height as needed
         )], width='auto'),], className="mb-3"))
         ############## ДАТА ЗМАГАНЬ ########################
@@ -406,8 +418,8 @@ class InterestingClass:
                             min=MIN_DATE,
                             max=MAX_DATE,
                             value=parameter["competition_date"],
-                            persistence = True,
-                            persistence_type = 'local'
+                            # persistence = True,
+                            # persistence_type = 'local'
                         )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
                     width='auto'
@@ -423,13 +435,14 @@ class InterestingClass:
                     html.Div([
                         dbc.Label("Кількість категорій"),
                         dcc.Input(
-                            id='CategoriesNumber',
+                            id="CategoriesNumber",
                             value=4,
                             type='number',
                             min=1,
                             max=10,
                             style={'width': '42%', 'height': 30, 'minWidth': '40px'}
-                        , persistence=True)
+                        , persistence=True
+                        )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
                     width='auto'
                 ),
@@ -441,7 +454,7 @@ class InterestingClass:
                             id="CategoriesNames",
                             value=", ".join(parameter["categories_names_lst"]),
                             style={'width': '200px', 'height': 30, 'minWidth': '200px'}
-                        , persistence=True
+                        # , persistence=True
                         )
                     ], style={'display': 'flex', 'alignItems': 'center'}),
                     width='auto'
@@ -486,7 +499,7 @@ class InterestingClass:
                                                                                        'margin-right': '2%'}),
                                                     dcc.Input(id="CategoriesAge", value=", ".join(parameter["categories_age_lst"]),
                                                               style={'width': '40%', 'height': 30, 'minWidth': '30px'}
-                                                              , persistence=True
+                                                              # , persistence=True
                                                               )], width=5
                                                    , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ############## ВАГОВІ КАТЕГОРІЇ ########################
@@ -514,18 +527,19 @@ class InterestingClass:
                                                         max=120,
                                                         style={'width': '11%', 'height': 30, 'minWidth': '40px'}
                                                         # Adjust height as needed
-                                                        , persistence=True),
+                                                        , persistence=True
+                                                    ),
 
                                                     ],
                                                    width='auto',
                                                    style={"display": "flex", "alignItems": "center"}),
 
-                                           dbc.Col([html.Div(hidden=True, id="CategoriesWeightHiddenGirl"),
+                                           dbc.Col([html.Div(hidden=True, id="CategoriesWeightGirlHidden"),
                                                dbc.Label("Вагові категорії(дівчата)"),
                                                dcc.Input(id="CategoriesWeightGirl",
-                                                         value=", ".join(parameter["categories_weight_lst"]),
+                                                         value=", ".join(parameter["categories_weight_girl_lst"]),
                                                          style={'width': '40%', 'height': 30, 'minWidth': '200px'}
-                                                         , persistence=True
+                                                         # , persistence=True
                                                          )], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
         ################ хлопці
@@ -561,14 +575,14 @@ class InterestingClass:
                                                               width='auto',
                                                               style={"display": "flex", "alignItems": "center"}),
 
-                                                      dbc.Col([html.Div(hidden=True, id="CategoriesWeightHiddenBoy"),
+                                                      dbc.Col([html.Div(hidden=True, id="CategoriesWeightBoyHidden"),
                                                                dbc.Label("Вагові категорії(хлопці)"),
                                                                dcc.Input(id="CategoriesWeightBoy",
                                                                          value=", ".join(
-                                                                             parameter["categories_weight_lst"]),
+                                                                             parameter["categories_weight_boy_lst"]),
                                                                          style={'width': '40%', 'height': 30,
                                                                                 'minWidth': '200px'}
-                                                                         , persistence=True
+                                                                         # , persistence=True
                                                                          )], width='auto'
                                                               , style={'display': 'flex', 'alignItems': 'center'})],
                                                      className="mb-3"))
@@ -579,7 +593,7 @@ class InterestingClass:
                                                         id='SexCuts',
                                                         value=", ".join(parameter["sex_cuts_lst"]),
                                                         style={'width': '40%', 'height': 30, 'minWidth': '180px'}  # Adjust height as needed
-                                                        , persistence=True
+                                                        # , persistence=True
                                                         , persistence_type='local'
                                                     ),
                                                     ],
@@ -592,18 +606,21 @@ class InterestingClass:
                                                dcc.Input(id="Sections",
                                                          value=", ".join(parameter["sections_all_lst"]),
                                                          style={'width': '50%', 'height': 30, 'minWidth': '200px'}
-                                                         , persistence=True)], width='auto'
+                                                         # , persistence=True
+                                                         )], width='auto'
                                                , style={'display': 'flex', 'alignItems': 'center'})], className="mb-3"))
 ##################### weightless ####################
         left_admin_container_children.append(
             dbc.Row([], id="WeightlessSections"))
+        left_admin_container_children.append(
+            dbc.Row([], id="NoCategorySections"))
 
 
 ######################################################
         left_admin_container_children.append(
 dbc.Row([dbc.Col(dcc.Checklist(
-    ['Ката Дівчата', 'Ката Хлопці', 'Ката Мікс'],
-    ['Ката Дівчата', 'Ката Хлопці', 'Ката Мікс']
+    parameter["sections_all_lst"],
+    parameter["sections_all_lst"]
 ,style={"margin-left": "10%"}, id="Section-1-check")
     , width='auto', style={'display': 'flex', 'alignItems': 'center'}, className="mb-3"),
 dbc.Col([]
@@ -905,7 +922,7 @@ dbc.Col([]
                           , State("TeamLeadsNames", "value")
                       , State("SubmissionDeadline", "value")
                           , State("CompetitionDate", "value"),
-                       State("LatterPattern", "value")], prevent_initial_callback=True)
+                       State("LatterPattern", "value")], prevent_initial_call=True)
         def send_invitations(n_clicks, title, emails, names, deadline, competition_date, pattern):
             this_competition_inv_dir = os.path.join(parameter["invitations_dir"], f"D{deadline}CD{competition_date}")
             names_ = [name_.lstrip().rstrip() for name_ in names.split(",")]
@@ -943,7 +960,7 @@ dbc.Col([]
             list_ = [s.rstrip().lstrip()  for s in str_categories.split(",")]
 
             if not list_:
-                list_ = ["A"]
+                return dash.no_update
             return dcc.RadioItems(
                 list_,
                 list_[0]
@@ -963,7 +980,7 @@ dbc.Col([]
 
         # TeamLeadsName
         @app.callback(Output("coachName-options", "children"),
-                      Input("TeamLeadsNames", "value"), prevent_initial_callback=True)
+                      Input("TeamLeadsNames", "value"), prevent_initial_call=True)
         def submit_coach_name_opt(name):
             if name is None:
                 return dash.no_update
@@ -1023,6 +1040,18 @@ dbc.Col([]
             sex_cuts_lst = [g.rstrip().lstrip()  for g in sex_cuts.split(",")]
             return [g.rstrip().lstrip()  for g in sex_cuts.split(",")[:2]]
 
+        @app.callback(Output("NoCategorySections", "children"),
+                      [Input("Sections", "value")
+                       ])
+        def submit_nocategory_sections(categories):
+            no_category_lst = []
+            for id_idx, cat in enumerate(categories.split(",")):
+                no_category_lst.append(cat.rstrip().lstrip())
+            if no_category_lst:
+                return self._get_no_category_checklists(no_category_lst, "Без категорій")
+            else:
+                return dash.no_update
+
         @app.callback([Output("SectionLists", "children"),
                        Output("WeightlessSections", "children")],
                       [Input("Sections", "value"),
@@ -1041,14 +1070,14 @@ dbc.Col([]
 
         ################################################################
         @app.callback(Output("CategoriesNames", "value"),
-                      [Input("CategoriesNumber", "value")], prevent_initial_callback=True)
+                      [Input("CategoriesNumber", "value")], prevent_initial_call=True)
         def submit_categories(categories_number):
             categories_names_lst = [chr(i + ord("A")) for i in range(categories_number)]
             return ", ".join(categories_names_lst)
 
         @app.callback(Output("CategoriesAge", "value"),
                       [Input("MinAge", "value"),
-                       Input("AgeCuts", "value")], prevent_initial_callback=True)
+                       Input("AgeCuts", "value")], prevent_initial_call=True)
         def submit_ages(min_age, age_step):
             max_age = 18
             categories_age_lst = [f"{a1}-{min(a2, max_age)-1}" for a1, a2 in zip(range(min_age, max_age, age_step), range(min_age+age_step, 18+age_step, age_step)) if (a1 != min(a2,max_age)-1)]
@@ -1059,7 +1088,7 @@ dbc.Col([]
 
         @app.callback(Output("CategoriesWeightGirl", "value"),
                       [Input("MaxWeightGirl", "value"),
-                       Input("WeightNumberGirl", "value")], prevent_initial_callback=True)
+                       Input("WeightNumberGirl", "value")], prevent_initial_call=True)
         def submit_weights(max_weight, weights_number):
             step = max_weight//weights_number
             start = max_weight % weights_number
@@ -1069,7 +1098,7 @@ dbc.Col([]
 
         @app.callback(Output("CategoriesWeightBoy", "value"),
                       [Input("MaxWeightBoy", "value"),
-                       Input("WeightNumberBoy", "value")], prevent_initial_callback=True)
+                       Input("WeightNumberBoy", "value")], prevent_initial_call=True)
         def submit_weights(max_weight, weights_number):
             step = max_weight // weights_number
             start = max_weight % weights_number
@@ -1258,6 +1287,7 @@ dbc.Col([]
                           , State("CategoriesNames", "value")
                           ,  State({"type": "Section-check", "index": ALL}, "value")
                           , State("Weightless-check", "value")
+                          , State("NoCategory-check", "value")
                           , State("CompetitionTitle", "value")
                           , State("ChiefSecretary", "value")
                           , State("ChiefJudge", "value")
@@ -1267,10 +1297,10 @@ dbc.Col([]
                       progress=[
                           Output("ComposeProtocolsProgress", "children")
                       ],
-                      prevent_initial_callback=True
+                      prevent_initial_call=True
                       , background=True)
         def compose_protocols(progress, n_clicks, deadline, competition_date, ages, weights_girls, weights_boys, categories, sections,
-                              weightless, competition_title, chief_secretary, chief_judge, sex_cuts):
+                              weightless, no_category, competition_title, chief_secretary, chief_judge, sex_cuts):
             sex_cuts_lst_ = [g.rstrip().lstrip() for g in sex_cuts.split(",")]
             sections = sum(sections, [])
             path_ = self.get_submission_dir(deadline, competition_date)
@@ -1294,17 +1324,19 @@ dbc.Col([]
 
                 for n,sec in enumerate(sections):
                     is_weightless = any([sec.find(w)!=-1 for w in weightless])
+                    is_no_category = any([sec.find(nc)!=-1 for nc in no_category])
                     is_girl = sec.find(sex_cuts_lst_[0]) != -1
                     is_boy = sec.find(sex_cuts_lst_[1]) != -1
                     is_mixed_sex = (not is_boy) and (not is_girl)
                     progress_percent = int(90*(n+1)*(n_fl+1)/(len(sections)*files_total))
                     progress(self.progress_input(progress_percent))
-                    for cat in categories:
+                    if is_no_category:
+                        #with no category begin
                         for age, age_b in zip(age_labels, age_bins):
                             if is_weightless or is_mixed_sex:
-                                title_ = f"{sec} (категорія {cat}, {age} років)"
+                                title_ = f"{sec} ({age} років)"
                                 mask = ((df_["age_cuts"] == age_b)
-                                        & (df_["Категорія"] == cat) & (df_[sec] == "+"))
+                                         & (df_[sec] == "+"))
                                 df__ = df_.loc[mask]
                                 df__["count"] = df__.shape[0]
                                 if not df__.empty:
@@ -1318,7 +1350,7 @@ dbc.Col([]
                                             & (df_["Категорія"] == cat) & (df_[sec] == "+"))
                                     df__ = df_.loc[mask]
                                     df__["count"] = df__.shape[0]
-                                    title_ = f"{sec} (категорія {cat}, {age} років {weight}кг)"
+                                    title_ = f"{sec} ({age} років {weight}кг)"
 
                                     if not df__.empty:
                                         if title_ in full_dic:
@@ -1338,6 +1370,48 @@ dbc.Col([]
                                             full_dic[title_].append(df__)
                                         else:
                                             full_dic[title_] = [df__]
+                            # with no category end
+                        #with category begin
+                        for cat in categories:
+                            for age, age_b in zip(age_labels, age_bins):
+                                if is_weightless or is_mixed_sex:
+                                    title_ = f"{sec} (категорія {cat}, {age} років)"
+                                    mask = ((df_["age_cuts"] == age_b)
+                                            & (df_["Категорія"] == cat) & (df_[sec] == "+"))
+                                    df__ = df_.loc[mask]
+                                    df__["count"] = df__.shape[0]
+                                    if not df__.empty:
+                                        if title_ in full_dic:
+                                            full_dic[title_].append(df__)
+                                        else:
+                                            full_dic[title_] = [df__]
+                                elif is_girl:
+                                    for weight, weight_b in zip(weight_girls_labels, weight_girls_bins):
+                                        mask = ((df_["age_cuts"] == age_b) & (df_["weight_girls_cuts"] == weight_b)
+                                                & (df_["Категорія"] == cat) & (df_[sec] == "+"))
+                                        df__ = df_.loc[mask]
+                                        df__["count"] = df__.shape[0]
+                                        title_ = f"{sec} (категорія {cat}, {age} років {weight}кг)"
+
+                                        if not df__.empty:
+                                            if title_ in full_dic:
+                                                full_dic[title_].append(df__)
+                                            else:
+                                                full_dic[title_] = [df__]
+                                elif is_boy:
+                                    for weight, weight_b in zip(weight_boys_labels, weight_boys_bins):
+                                        mask = ((df_["age_cuts"] == age_b) & (df_["weight_boys_cuts"] == weight_b)
+                                                & (df_["Категорія"] == cat) & (df_[sec] == "+"))
+                                        df__ = df_.loc[mask]
+                                        df__["count"] = df__.shape[0]
+                                        title_ = f"{sec} (категорія {cat}, {age} років {weight}кг)"
+
+                                        if not df__.empty:
+                                            if title_ in full_dic:
+                                                full_dic[title_].append(df__)
+                                            else:
+                                                full_dic[title_] = [df__]
+                                # with category (end)
 
             protocols_dir = self.get_protocols_dir(deadline, competition_date)
             excel_writer = ExcelWriter(competition_title+f"\n({competition_date.replace('-','.')})", chief_secretary, chief_judge, protocols_dir)
@@ -1392,19 +1466,25 @@ dbc.Col([]
         #         return dash.no_update, f"Не правильна дата народження учасника. Вік учасника може бути від {min_age} до 18"
 
         @app.callback(Output("CategoriesNamesHidden", "children"),
-                      Input("CategoriesNames", "value"), prevent_initial_callback=True)
+                      Input("CategoriesNames", "value"), prevent_initial_call=True)
         def dump_categories(categories):
             self.modify_config_file("categories_names_lst", [c.lstrip().rstrip() for c in categories.split(",")])
             return dash.no_update
 
-        @app.callback(Output("CategoriesWeightHidden", "children"),
-                      Input("CategoriesWeight", "value"), prevent_initial_callback=True)
+        @app.callback(Output("CategoriesWeightBoyHidden", "children"),
+                      Input("CategoriesWeightBoy", "value"), prevent_initial_call=True)
         def dump_category_weight(categories):
-            self.modify_config_file("categories_weight_lst", [c.lstrip().rstrip() for c in categories.split(",")])
+            self.modify_config_file("categories_weight_boy_lst", [c.lstrip().rstrip() for c in categories.split(",")])
+            return dash.no_update
+
+        @app.callback(Output("CategoriesWeightGirlHidden", "children"),
+                      Input("CategoriesWeightGirl", "value"), prevent_initial_call=True)
+        def dump_category_weight(categories):
+            self.modify_config_file("categories_weight_girl_lst", [c.lstrip().rstrip() for c in categories.split(",")])
             return dash.no_update
 
         @app.callback(Output("CategoriesAgeHidden", "children"),
-                      Input("CategoriesAge", "value"), prevent_initial_callback=True)
+                      Input("CategoriesAge", "value"), prevent_initial_call=True)
         def dump_category_age(categories):
             self.modify_config_file("categories_age_lst", [c.lstrip().rstrip() for c in categories.split(",")])
             return dash.no_update
