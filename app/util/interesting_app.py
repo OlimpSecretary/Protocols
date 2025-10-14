@@ -715,7 +715,7 @@ dbc.Col([]
         left_column_container.append(
             dbc.Row([dbc.Col([dbc.Label("Назва команди", style={'display': 'inline-block',
                                                                     'margin-left': '10%', 'margin-right': '2%'})
-                                 , dcc.Input(id="Teams",
+                                 , dcc.Input(id="TeamName",
                                                          value="Олімп",
                                                          style={'width': '50%', 'height': 30, 'minWidth': '200px'},
                                                                    type="text"
@@ -1368,7 +1368,7 @@ dbc.Col([]
                             elif is_girl:
                                 for weight, weight_b in zip(weight_girls_labels, weight_girls_bins):
                                     mask = ((df_["age_cuts"] == age_b) & (df_["weight_girls_cuts"] == weight_b)
-                                            & (df_["Категорія"] == cat) & (df_[sec] == "+"))
+                                             & (df_[sec] == "+"))
                                     df__ = df_.loc[mask]
                                     df__["count"] = df__.shape[0]
                                     title_ = f"{sec} ({age} років {weight}кг)"
@@ -1381,10 +1381,10 @@ dbc.Col([]
                             elif is_boy:
                                 for weight, weight_b in zip(weight_boys_labels, weight_boys_bins):
                                     mask = ((df_["age_cuts"] == age_b) & (df_["weight_boys_cuts"] == weight_b)
-                                            & (df_["Категорія"] == cat) & (df_[sec] == "+"))
+                                             & (df_[sec] == "+"))
                                     df__ = df_.loc[mask]
                                     df__["count"] = df__.shape[0]
-                                    title_ = f"{sec} (категорія {cat}, {age} років {weight}кг)"
+                                    title_ = f"{sec} ({age} років {weight}кг)"
 
                                     if not df__.empty:
                                         if title_ in full_dic:

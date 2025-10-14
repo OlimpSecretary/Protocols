@@ -4,13 +4,13 @@ from openpyxl.styles import Font
 from openpyxl.styles import Alignment
 import pandas as pd
 from os.path import join as path_join
-
+STEP_ROWS = 2
 
 
 class ExcelWriter:
     def __init__(self, competition_title, chief_secretary, chief_judge, protocols_dir):
         self.competition_title = competition_title
-        self.participants_per_page = 26
+        self.participants_per_page = 20
         self.partners_per_page = self.participants_per_page // 2
         self.main_judge = chief_judge
         self.main_secretary = chief_secretary
@@ -48,29 +48,26 @@ class ExcelWriter:
                                  top=Side(style='thin'),
                                  bottom=Side(style='thin'))
 
-
-            for half_row in range(index0//3, self.partners_per_page+index0//3):
+            for half_row in range(index0//STEP_ROWS, self.partners_per_page+index0//STEP_ROWS):
                 # Draw a diagonal line (top-left to bottom-right)
-                ws[f'B{3 * half_row + 4}'].border = thin_border
-                ws[f'C{3 * half_row + 4}'].border = thin_border
+                ws[f'B{STEP_ROWS * half_row + 4}'].border = thin_border
+                ws[f'C{STEP_ROWS * half_row + 4}'].border = thin_border
                 # idx = 2*half_row
                 if df_index in df.index:
-                    ws[f'B{3 * half_row + 4}'].value = df.loc[df_index, "Команда"]
-                    ws[f'C{3 * half_row + 4}'].value = df.loc[df_index, "Учасник"]
-                ws[f'A{3 * half_row + 4}'] = f"{df_index+1} aka"
+                    ws[f'B{STEP_ROWS * half_row + 4}'].value = df.loc[df_index, "Команда"]
+                    ws[f'C{STEP_ROWS * half_row + 4}'].value = df.loc[df_index, "Учасник"]
+                ws[f'A{STEP_ROWS * half_row + 4}'] = f"{df_index+1} aka"
                 df_index += 1
-                ws[f'B{3 * half_row + 5}'].border = thin_border
-                ws[f'C{3 * half_row + 5}'].border = thin_border
-                # idx = 2*half_row+1
+                ws[f'B{STEP_ROWS * half_row + 5}'].border = thin_border
+                ws[f'C{STEP_ROWS * half_row + 5}'].border = thin_border
                 if df_index in df.index:
-                    ws[f'B{3 * half_row + 5}'].value = df.loc[df_index, "Команда"]
-                    ws[f'C{3 * half_row + 5}'].value = df.loc[df_index, "Учасник"]
-                ws[f'A{3 * half_row + 5}'] = f"{df_index+1} sira"
+                    ws[f'B{STEP_ROWS * half_row + 5}'].value = df.loc[df_index, "Команда"]
+                    ws[f'C{STEP_ROWS * half_row + 5}'].value = df.loc[df_index, "Учасник"]
+                ws[f'A{STEP_ROWS * half_row + 5}'] = f"{df_index+1} sira"
                 df_index += 1
-                ws[f'D{3*half_row+5}'].border = Border(diagonalUp=True, diagonal=Side(style='thin'))
-                ws[f'D{3*half_row+4}'].border = Border(diagonalDown=True, diagonal=Side(style='thin'))
-                ws[f'E{3 * half_row + 4}'].border = Border(bottom=Side(style='thin'))
-
+                ws[f'D{STEP_ROWS*half_row+5}'].border = Border(diagonalUp=True, diagonal=Side(style='thin'))
+                ws[f'D{STEP_ROWS*half_row+4}'].border = Border(diagonalDown=True, diagonal=Side(style='thin'))
+                ws[f'E{STEP_ROWS * half_row + 4}'].border = Border(bottom=Side(style='thin'))
 
             ws[f'B{footer_idx}'].border = Border(bottom=Side(style='thin'))
             ws[f'E{footer_idx}'].border = Border(bottom=Side(style='thin'))
@@ -82,12 +79,26 @@ class ExcelWriter:
 
             footer_idx += footer_idx0+2
             # break
-        ws.column_dimensions['A'].width = 5
-        ws.column_dimensions['B'].width = 20
-        ws.column_dimensions['C'].width = 25
-        ws.column_dimensions['D'].width = 10
-        ws.column_dimensions['E'].width = 20
+            for i in range(2, 12, 2):
+                D = chr(i + ord("D"))
+                E = chr(i + ord("E"))
+                for half_row in range(index0 // STEP_ROWS, self.partners_per_page + index0 // STEP_ROWS- i//2):
+                    # Draw a diagonal line (top-left to bottom-right)
+                    ws[f'{D}{STEP_ROWS * half_row + 5+i//2}'].border = Border(diagonalUp=True, diagonal=Side(style='thin'))
+                    ws[f'{D}{STEP_ROWS * half_row + 4+i//2}'].border = Border(diagonalDown=True, diagonal=Side(style='thin'))
+                    ws[f'{E}{STEP_ROWS * half_row + 4+i//2}'].border = Border(bottom=Side(style='thin'))
+                ws.column_dimensions[D].width = 7
+                ws.column_dimensions[E].width = 15
+        ws.column_dimensions['A'].width = 7
+        ws.column_dimensions['B'].width = 11
+        ws.column_dimensions['C'].width = 20
+        ws.column_dimensions['D'].width = 7
+        ws.column_dimensions['E'].width = 15
         wb.save(path_join(self.data_dir, f"{title}.xlsx"))
+
+
+
+
 
 #
 # # Create a new workbook and select the active sheet
