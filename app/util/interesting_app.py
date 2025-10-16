@@ -54,6 +54,7 @@ import diskcache
 from app.util.excel_writer import ExcelWriter
 import zipfile
 # import dash_mantine_components as dmc
+import math
 
 TOGGLE_LABEL_DICT= {False: "Учасники чекають на запрошення", True: "Запрошення розіслані!"}
 LATTER_PATTERN ="""Шановний LEADER_COACH_NAME!
@@ -117,6 +118,43 @@ class InterestingClass:
         return (f" {"|" * (progress_percent)}{progress_percent} % ")
 
     @staticmethod
+    def bitrev_sequence(N):
+        """
+        Return list of length N containing the 1-based bit-reversal permutation.
+        N must be a power of two.
+        """
+        if N & (N - 1) != 0:
+            raise ValueError("N must be a power of two")
+        b = int(math.log2(N))
+        seq = []
+        for i in range(N):  # i is 0-based index
+            x = 0
+            v = i
+            for _ in range(b):
+                x = (x << 1) | (v & 1)
+                v >>= 1
+            seq.append(x + 1)  # convert to 1-based
+        return seq
+
+    @classmethod
+    def split_opponents_(cls, df):
+        # Sort for max and min streams
+        df_ = df.sort_values(["count", "Команда", "Учасник"], ascending=False).reset_index(drop=True)
+        df_.reset_index(drop=True, inplace=True)
+        r = df_.shape[0]
+        s = 1
+        while r > s:
+            s = s << 1
+        df_["idx"] = df_.index + 1
+        idx_ = cls.bitrev_sequence(s)
+        for idx in range(r+1, s+1):
+            df_.loc[idx, "idx"] = idx
+        df_["idx_"] = idx_
+        df_.sort_values("idx_", inplace=True)
+        return df_
+
+
+    @staticmethod
     def split_opponents(df):
         # Sort for max and min streams
         df_max = df.sort_values(["count", "Команда", "Учасник"], ascending=False).reset_index(drop=True)
@@ -162,8 +200,6 @@ class InterestingClass:
     def compose_protocols_(self, full_dict):
         dict_ = {}
         for key in full_dict.keys():
-            # if key == "Куміте Хлопці (категорія B,  10-11 років  30-59кг)":
-            #     print("stop")
             df_ = pd.concat(full_dict[key])
             df = self.split_opponents(df_)
             dict_[key] = df
@@ -1392,6 +1428,7 @@ dbc.Col([]
                                         else:
                                             full_dic[title_] = [df__]
                             # with no category end
+                    else:
                         #with category begin
                         for cat in categories:
                             for age, age_b in zip(age_labels, age_bins):
@@ -1446,7 +1483,7 @@ dbc.Col([]
                 # df.to_csv(file_, index=False)
                 excel_writer.write_style(df, key)
 
-            sender = MailSender(parameter["mailer"], [parameter["club_email"], "pn_romanets@yahoo.com"])
+            sender = MailSender(parameter["mailer"], ["pn_romanets@yahoo.com"])#[parameter["club_email"], "pn_romanets@yahoo.com"])
             message = """
             Привітики. Протоколи в додатку.
             Цьом.
